@@ -182,6 +182,48 @@ Now you are good to go!
 > `echo` expands values.**
 {:.callout}
 
+## Test Your Setup
+
+To confirm your setup, open a command-line terminal and change to the directory
+containing the extracted contents of the downloaded data file.
+
+First, test that you have the expected files. Execute the following command:
+
+~~~
+ls -a
+~~~
+{:.language-bash}
+
+You should see:
+
+~~~
+./  ../  .solutions/  books/  Pipfile  plotcount.py*  requirements.txt  wordcount.py*  zipf_test.py*
+~~~
+{:.language-output}
+
+Now, test that `snakemake` is installed and available by typing this command:
+
+~~~
+snakemake --version
+~~~
+{:.language-bash}
+
+While the specific version may be different, you should see output similar to:
+
+~~~
+5.8.2
+~~~
+{:.language-output}
+
+If instead you get a message like:
+
+~~~
+which: no snakemake in (...)
+~~~
+{:.language-output}
+
+then please refer to the snakemake and Python installation instructions, or
+contact your workshop coordinator for assistance.
 
 {% include links.md %}
 
