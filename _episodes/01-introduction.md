@@ -6,8 +6,10 @@ questions:
 - "How can I make my results easier to reproduce?"
 objectives:
 - "Understand our example problem."
+- "Understand some advantages and limitations of using shell scripts to manage
+  a workflow."
 keypoints:
-- "Bash scripts are not an efficient way of defining a workflow."
+- "While shell scripts can help document and reproduce a workflow, they are not an efficient way of doing this."
 ---
 
 Let's imagine that we're interested in understanding the frequency of words
