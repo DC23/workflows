@@ -59,6 +59,13 @@ rule count_words_last:
 ~~~
 {: .language-python}
 
+> ## Discussion
+> 
+> Looking at the Snakefile, what positive and negative observations can you make?
+{:.discussion}
+
+## Removing Duplication
+
 This has a lot of duplication. For example, the names of text files and data
 files are repeated in many places throughout the Snakefile. Snakefiles are
 a form of code and, in any code, repetition can lead to problems (e.g. we rename
@@ -170,51 +177,27 @@ Finished job 0.
 ~~~
 {: .output}
 
-> ## Update Dependencies
->
-> What will happen if you now execute:
->
-> ~~~
-> touch *.dat
-> snakemake results.txt
-> ~~~
-> {: .language-bash}
->
->
-> 1. nothing
-> 2. all files recreated
-> 3. only `.dat` files recreated
-> 4. only `results.txt` recreated
->
-> > ## Solution
-> > Only `results.txt` recreated.
-> >
-> > The rules for `*.dat` are not executed because their corresponding `.txt` files
-> > haven't been modified.
-> >
-> > If you run:
-> >
-> > ~~~
-> > touch books/*.txt
-> > snakemake results.txt
-> > ~~~
-> >{: .language-bash}
-> >
-> >
-> > you will find that the `.dat` files as well as `results.txt` are recreated.
-> {: .solution}
-{: .challenge}
-
 As we saw, `{input}` means 'all the dependencies of the current rule'. This
-works well for `zipf_test` as its action treats all the dependencies the same
-- as the input for the `zipf_test.py` script.
+works well for `zipf_test` as its action uses all the dependencies
+as inputs to the `zipf_test.py` script.
 
 Time for you to update all the rules that build a `.dat` file to use the
 `{input}` and `{output}` wildcards.
 
-> ## Rewrite `.dat` rules to use wildcards
+> ## Rewrite the count_word rules to use wildcards
 >
-> Rewrite each `.dat` rule to use the `{input}` and `{output}` wildcards.
+> Rewrite `count_words`, `count_words_abyss`, and `count_words_last` 
+> to use the `{input}` and `{output}` wildcards.
+>
+> Here is a partial solution to `count_words`:
+> ~~~
+> rule count_words:
+>     input: 'books/isles.txt'
+>     output: 'isles.dat'
+>     shell: 'python wordcount.py {_} {_}'
+> ~~~
+> {: .language-python}
+>
 > > ## Solution
 > > Only one rule is shown here, the others will have an identical action (the
 > > `shell:` line):
@@ -233,7 +216,7 @@ Time for you to update all the rules that build a `.dat` file to use the
 
 For many rules, we will need to make finer distinctions between inputs. It is
 not always appropriate to pass all inputs as a lump to your action. For example,
-our rules for `.dat` use their first (and only) dependency specifically as the
+our count_words rules use their first (and only) dependency specifically as the
 input file to `wordcount.py`. If we add additional dependencies (as we will soon
 do) then we don't want these being passed as input files to `wordcount.py`: it
 expects just one input file.
