@@ -30,16 +30,24 @@ Our goal is to automate the example workflow discussed in the previous
 episode, and have it do everything for us in parallel regardless of where and
 how it is run (and have it be reproducible!).
 
-Create a file, called `Snakefile`, with the following content:
-
-~~~
-# Count words in one of the books
-rule count_words:
-    input: 'books/isles.txt'
-    output: 'isles.dat'
-    shell: 'python wordcount.py books/isles.txt isles.dat'
-~~~
-{: .language-python}
+> ## Create your first Snakefile
+> 
+> Create a file, called `Snakefile`, with the following content:
+> 
+> ~~~
+> rule count_words:
+>     input: 'books/isles.txt'
+>     output: 'isles.dat'
+>     shell: 'python wordcount.py books/isles.txt isles.dat'
+> ~~~
+> {: .language-python}
+> 
+> Without reading further, what do you think this file does?
+> > ## Solution
+> > 
+> > This file describes how to build `isles.dat` from `books/isles.txt`.
+> {: .solution}
+{:.challenge}
 
 This is a [build file][ref-build-file], which for Snakemake is called a
 Snakefile - a file executed by Snakemake. Note that aside from a few keyword
@@ -47,8 +55,6 @@ additions like `rule`, it follows standard Python 3 syntax.
 
 Let us go through each line in turn:
 
-* `#` denotes a *comment*. Any text from `#` to the end of the line is
-ignored by Snakemake.
 * `isles.dat` is a [target][ref-target], a file to be
 created, or built. In Snakemake, these are also called **outputs**.
 * `books/isles.txt` is a [dependency][ref-dependency], a
@@ -211,18 +217,33 @@ recalculate outputs when the code also changes.
 > of documentation, reducing the number of things we have to remember.
 {: .callout}
 
-Let's add another rule to the end of `Snakefile`. Note that rules cannot have
-the same name, so we'll call this one `count_words_abyss`.
+> ## Add a new rule to build `abyss.dat`
+> 
+> Add another rule to the end of `Snakefile` to build `abyss.dat` from
+> `books/abyss.txt`.
+> 
+> Note that rules cannot have the same name, so call the new rule 
+> `count_words_abyss`.
+> 
+> > ## Solution
+> > 
+> > Your Snakefile should now look like:
+> > ~~~
+> > rule count_words:
+> >     input: 'books/isles.txt'
+> >     output: 'isles.dat'
+> >     shell: 'python wordcount.py books/isles.txt isles.dat'
+> > 
+> > rule count_words_abyss:
+> > 	input: 	'books/abyss.txt'
+> > 	output: 'abyss.dat'
+> > 	shell: 	'python wordcount.py books/abyss.txt abyss.dat'
+> > ~~~
+> > {: .language-python}
+> {:.solution}
+{:.challenge}
 
-~~~
-rule count_words_abyss:
-	input: 	'books/abyss.txt'
-	output: 'abyss.dat'
-	shell: 	'python wordcount.py books/abyss.txt abyss.dat'
-~~~
-{: .language-python}
-
-If we run Snakemake,
+Now let's run Snakemake to execute the new rule:
 
 ~~~
 snakemake
