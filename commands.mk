@@ -6,7 +6,7 @@ clean-sample-code :
 	@echo Cleaning sample code ...
 	@cd code; rm -rf .snakemake/ dats/ plots/ __pycache__/ \
 		Snakefile config.yaml cluster.yaml results.txt \
-		zipf_analysis.tar.gz Pipfile.lock
+		zipf_analysis.tar.gz Pipfile.lock *.dat *.png
 	@find code/ -name '*.pyc' -exec rm {} \;
 	@rm -f ./files/*
 
