@@ -8,6 +8,7 @@ objectives:
 - "Understand the components of a Snakefile: rules, inputs, outputs, and actions."
 - "Write a simple Snakefile."
 - "Run Snakemake from the shell."
+- "Explain default rules."
 - "Perform a dry-run, to understand your workflow without executing anything."
 keypoints:
 - "Snakemake is one method of managing a complex computational workflow."
@@ -15,6 +16,7 @@ keypoints:
 - "Snakemake follows Python syntax."
 - "Rules can have an input and/or outputs, and a command to be run."
 - "Snakemake only executes rules when required."
+- "The first rule in a `Snakefile` is called the default rule. It is executed if you don't specify a rule or target."
 ---
 
 Snakemake is one of many tools to automate file-based data processing
@@ -29,6 +31,8 @@ The rest of these lessons aim to teach you how to use Snakemake by example.
 Our goal is to automate the example workflow discussed in the previous
 episode, and have it do everything for us in parallel regardless of where and
 how it is run (and have it be reproducible!).
+
+## Your First Snakefile
 
 > ## Create your first Snakefile
 > 
@@ -75,7 +79,15 @@ Information that was implicit in our shell script - that we are generating a
 file called `isles.dat` and that creating this file requires
 `books/isles.txt` - is now made explicit by Snakemake's syntax.
 
-Let's first ensure we start from scratch and delete the `.dat`, `.png`, and
+> ## Snakefiles as Documentation
+>
+> By explicitly recording the inputs to and outputs from steps in our
+> analysis and the dependencies between files, Snakefiles act as a type
+> of documentation, reducing the number of things we have to remember.
+{: .callout}
+
+Before running Snakemake, 
+let's first ensure we start from scratch and delete the `.dat`, `.png`, and
 `results.txt` files we created earlier:
 
 ~~~
@@ -91,7 +103,7 @@ snakemake
 ~~~
 {: .language-bash}
 
-By default, Snakemake tells us what it's doing as it executes actions:
+Snakemake tells us what it's doing as it executes actions:
 
 ~~~
 Provided cores: 1
@@ -134,6 +146,8 @@ The first 5 lines of `isles.dat` should look exactly like before.
 >{: .language-bash}
 >
 {: .callout}
+
+## Incremental Builds
 
 When we re-run our Snakefile, Snakemake now informs us that:
 
@@ -210,12 +224,7 @@ recalculate outputs when the code also changes.
 > more efficient.
 {: .callout}
 
-> ## Snakefiles as Documentation
->
-> By explicitly recording the inputs to and outputs from steps in our
-> analysis and the dependencies between files, Snakefiles act as a type
-> of documentation, reducing the number of things we have to remember.
-{: .callout}
+## Adding New Rules
 
 > ## Add a new rule to build `abyss.dat`
 > 
@@ -312,9 +321,11 @@ Finished job 0.
 > difference in a filename will result in a MissingRuleException.
 {: .callout}
 
+## Cleaning Up
+
 We may want to remove all our data files so we can explicitly recreate them all.
 We can introduce a new target, and associated rule, to do this. We will call it
-`clean`, as this is a common name for rules that delete auto-generated files,
+`clean`, as this is a common name for rules that delete generated files,
 like our `.dat` files. Add the following rule to the start of your Snakefile.
 
 ~~~
@@ -354,9 +365,11 @@ Finished job 0.
 An `ls` of our current directory reveals that all of our troublesome output
 files are now gone (as planned)!
 
+## Building Everything
+
 We can add a similar command to create all the data files. We can put this at
 the top of our Snakefile so that it is the [default
-target][ref-default-target], which is executed by default if no target is
+target][ref-default-target], which is executed if no target is
 given to the `snakemake` command:
 
 ~~~
@@ -473,6 +486,8 @@ rule count_words_abyss:
 The following figure shows a graph of the dependencies embodied within our
 Snakefile, involved in building the `dats` target:
 ![Dependencies represented within the Snakefile][fig-dats]
+
+## Dry-runs
 
 At this point, it becomes important to see what snakemake is doing behind the
 scenes. What commands is snakemake actually running? Snakemake has a special
