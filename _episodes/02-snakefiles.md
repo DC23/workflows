@@ -17,6 +17,8 @@ keypoints:
 - "Rules can have an input and/or outputs, and a command to be run."
 - "Snakemake only executes rules when required."
 - "The first rule in a `Snakefile` is called the default rule. It is executed if you don't specify a rule or target."
+- "`snakemake -n` or `snakemake --dry-run` performs a dry-run."
+- "`snakemake -p` prints the action commands to the Snakemake output."
 ---
 
 Snakemake is one of many tools to automate file-based data processing
@@ -329,7 +331,6 @@ We can introduce a new target, and associated rule, to do this. We will call it
 like our `.dat` files. Add the following rule to the start of your Snakefile.
 
 ~~~
-# delete everything so we can re-run things
 rule clean:
     shell: 'rm -f *.dat'
 ~~~
@@ -367,7 +368,7 @@ files are now gone (as planned)!
 
 ## Building Everything
 
-We can add a similar command to create all the data files. We can put this at
+We can add a similar command to create all the data files. We put this at
 the top of our Snakefile so that it is the [default
 target][ref-default-target], which is executed if no target is
 given to the `snakemake` command:
@@ -382,9 +383,9 @@ rule dats:
 
 This is an example of a rule with dependencies that are targets of other
 rules. When Snakemake runs, it will check to see if the dependencies exist
-and, if not, will see if rules are available that will create these. If such
-rules exist it will invoke these first, otherwise Snakemake will raise an
-error.
+and, if not, will see if rules are available that will create them.
+If snakemake can find a way to build all the inputs, it will do so. If it can't,
+then it will cause the `MissingRuleException` that we saw earlier.
 
 > ## Dependencies
 >
@@ -492,9 +493,20 @@ Snakefile, involved in building the `dats` target:
 At this point, it becomes important to see what snakemake is doing behind the
 scenes. What commands is snakemake actually running? Snakemake has a special
 option (`-p`), that prints every command it is about to run. Additionally, we
-can also perform a dry run with `-n`. A dry run does nothing, and simply
-prints out commands instead of actually executing them. Very useful for
-debugging!
+can also perform a dry run with `-n` or `--dry-run`. A dry run does not run any
+rules. But it does check that all the targets you have requested are buildable.
+Very useful for debugging!
+
+Whenever you edit your Snakefile, you should perform a dry-run with
+`snakemake clean && snakemake -n` or `snakemake clean && snakemake --dry-run`
+immediately afterwards. This will check for errors and make sure that the
+workflow is able to run. The clean is required to force the dry-run to test
+the entire workflow.
+
+The most common source of errors is a mismatch in filenames (Snakemake
+doesn't know how to produce a particular output file) - `snakemake -n` will
+catch this as long as the troublesome output files haven't already been made,
+and the `snakemake clean` should take care of that.
 
 ~~~
 snakemake clean

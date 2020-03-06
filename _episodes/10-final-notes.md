@@ -5,11 +5,9 @@ exercises: 0
 questions:
 - "What are some tips and tricks I can use to make this easier?"
 objectives:
-- "Understand how to perform a dry-run of your workflow."
 - "Understand how to configure logging so that each rule generates a separate log."
 - "Understand how to visualise your workflow."
 keypoints:
-- "`snakemake -n` performs a dry-run."
 - "Using log files can make your workflow easier to debug."
 - "Put log files in the same location as the rule outputs."
 - "Token files can be used to take the place of output files if none are created."
@@ -22,17 +20,6 @@ Now that we know how to write and scale a pipeline, here are some tips and
 tricks for making the process go more smoothly.
 
 ## dry-run is your friend
-
-Whenever you edit your Snakefile, you should perform a dry-run with
-`snakemake clean && snakemake -n` or `snakemake clean && snakemake --dry-run`
-immediately afterwards. This will check for errors and make sure that the
-pipeline is able to run. The clean is required to force the dry run to test
-the entire pipeline.
-
-The most common source of errors is a mismatch in filenames (Snakemake
-doesn't know how to produce a particular output file) - `snakemake -n` will
-catch this as long as the troublesome output files haven't already been made,
-and the `snakemake clean` should take care of that.
 
 ## Configuring logging
 

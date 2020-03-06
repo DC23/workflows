@@ -222,16 +222,6 @@ rule can be anything you like, it is common practice to call the default rule
 > {:.solution}
 {:.challenge}
 
-## Cleaning House
-
-It is common practice to have a `clean` rule that deletes all intermediate
-and generated files, taking your workflow back to a blank slate.
-
-We already have a `clean` rule, so now is a good time to check that it
-removes all intermediate and output files. First do a `snakemake all` followed
-by `snakemake clean`. Then check to see if any output files remain and add them
-to the clean rule if required.
-
 ## Creating an Archive
 
 Let's add a processing rule that depends on all previous stages of the workflow.
