@@ -8,21 +8,21 @@ objectives:
 - "Use Snakemake wildcards to simplify our rules."
 - "Understand that outputs depend not only on the input data files but
 also on the scripts or code."
+- "Be able to specify scripts as inputs to a rule."
+- "Be able to use indexed and named wildcards."
 keypoints:
 - "Use `{output}` to refer to the output of the current rule."
 - "Use `{input}` to refer to the dependencies of the current rule."
-- "You can use Python indexing to retrieve individual outputs and inputs
+- "You can use Python indexing to retrieve individual wildcard values
 (example: `{input[0]}`)"
 - "Wildcards can be named (example: `{input.file1}`)."
 - "Naming the code or scripts used by a rule as inputs ensures that the rule
 is executed if the code or script changes."
 ---
 
-After the exercise at the end of the previous episode, our Snakefile looked like
-this:
+After the previous episode, our Snakefile looked like this:
 
 ~~~
-# Generate summary table
 rule zipf_test:
     input:
         'isles.dat',
@@ -37,11 +37,9 @@ rule dats:
         'abyss.dat',
         'last.dat'
 
-# delete everything so we can re-run things
 rule clean:
     shell: 'rm -f *.dat results.txt'
 
-# Count words in one of the books
 rule count_words:
     input: 'books/isles.txt'
     output: 'isles.dat'
@@ -66,10 +64,10 @@ rule count_words_last:
 
 ## Removing Duplication
 
-This has a lot of duplication. For example, the names of text files and data
-files are repeated in many places throughout the Snakefile. Snakefiles are
-a form of code and, in any code, repetition can lead to problems (e.g. we rename
-a data file in one part of the Snakefile but forget to rename it elsewhere).
+There is a lot of duplication. For example, the names of files are repeated in
+many places throughout the Snakefile. Snakefiles are a form of code and, in any
+code, repetition can lead to problems (e.g. we rename a data file in one part of
+the Snakefile but forget to rename it elsewhere).
 
 > ## D.R.Y. (Don't Repeat Yourself)
 >
@@ -342,7 +340,7 @@ Finished job 0.
 ~~~
 {: .output}
 
-The whole pipeline is triggered, even the creation of the `results.txt` file!
+The whole workflow is triggered, even the creation of the `results.txt` file!
 To understand this, note that according to the dependency graph, `results.txt`
 depends on the `.dat` files. The update of `wordcount.py` triggers an update of
 the `*.dat` files. Thus, `Snakemake` sees that the dependencies (the `.dat`
@@ -350,27 +348,6 @@ files) are newer than the target file (`results.txt`) and it therefore recreates
 `results.txt`. This is an example of the power of `Snakemake`: updating a subset
 of the files in the pipeline triggers rerunning the appropriate downstream
 steps.
-
-> ## Updating One Input File
->
-> What will happen if you now execute:
->
-> ~~~
-> touch books/last.txt
-> snakemake results.txt
-> ~~~
-> {: .language-bash}
->
-> 1. only `last.dat` is recreated
-> 2. all `.dat` files are recreated
-> 3. only `last.dat` and `results.txt` are recreated
-> 4. all `.dat` and `results.txt` are recreated
->
-> > ## Solution
-> >
-> > `3.` only `last.dat` and `results.txt` are recreated
-> {: .solution}
-{: .challenge}
 
 > ## Update `count_words_last` to depend on `wordcount.py`
 >

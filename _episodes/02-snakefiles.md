@@ -226,6 +226,27 @@ recalculate outputs when the code also changes.
 > more efficient.
 {: .callout}
 
+> ## Updating One Input File
+>
+> What will happen if you now execute:
+>
+> ~~~
+> touch books/last.txt
+> snakemake results.txt
+> ~~~
+> {: .language-bash}
+>
+> 1. only `last.dat` is recreated
+> 2. all `.dat` files are recreated
+> 3. only `last.dat` and `results.txt` are recreated
+> 4. all `.dat` and `results.txt` are recreated
+>
+> > ## Solution
+> >
+> > `3.` only `last.dat` and `results.txt` are recreated
+> {: .solution}
+{: .challenge}
+
 ## Adding New Rules
 
 > ## Add a new rule to build `abyss.dat`
