@@ -10,6 +10,7 @@ objectives:
 - "Run Snakemake from the shell."
 - "Explain default rules."
 - "Perform a dry-run, to understand your workflow without executing anything."
+- "Understand incremental builds."
 keypoints:
 - "Snakemake is one method of managing a complex computational workflow."
 - "If you have previously used `make`, then Snakemake will be familiar."
@@ -17,6 +18,7 @@ keypoints:
 - "Rules can have an input and/or outputs, and a command to be run."
 - "Snakemake only executes rules when required."
 - "The first rule in a `Snakefile` is called the default rule. It is executed if you don't specify a rule or target."
+- "Incremental builds improve efficieny by only processing files when required."
 - "`snakemake -n` or `snakemake --dry-run` performs a dry-run."
 - "`snakemake -p` prints the action commands to the Snakemake output."
 ---
